@@ -1,0 +1,70 @@
+/** 
+ * WorkerMethodManager - part of the H5 framework
+ * http://h5framework.com
+ *
+ * @author Jacek Karczmarczyk <jacek@karczmarczyk.pl>
+ * @license Dual licensed under the MIT or GPL Version 2 licenses.
+ * @copyright Copyright © 2011, Jacek Karczmarczyk
+ *
+ */ 
+
+"use strict";
+
+/**
+ * Usage:
+ * 
+ * var wp = new WorkerMethodManager(this, function (data, callback) {
+ *     var result = doSomethingWithData(data);
+ *     callback(result);
+ * });
+ * 
+ * @todo Opis klasy
+ */
+function WorkerMethodManager(self, handler, sequential /* = true */) {
+    var currentMessageId = null;
+    var queue = [];
+    
+    if (arguments.length < 3) {
+        sequential = true;
+    }
+
+    function _callNextHandler() {
+        if (queue.length) {
+            _callHandler(queue.shift());
+        }
+    }
+
+    function _callHandler(event) {
+        currentMessageId = event.data.messageId;
+        handler(event.data.data, function (result) {
+            self.postMessage({
+                messageId: event.data.messageId,
+                data: result
+            });
+            currentMessageId = null;
+            if (sequential) {
+                _callNextHandler();
+            }
+        });
+    }
+
+    self.addEventListener('message', function (event) {
+        if (sequential && currentMessageId) {
+            queue.push(event);
+        }
+        else {
+            _callHandler(event);
+        }
+    });
+
+    self.addEventListener('error', function (event) {
+        if (currentMessageId) {
+            self.postMessage({
+                messageId: currentMessageId,
+                error: event.message
+            });
+            currentMessageId = null;
+            _callNextHandler();
+        }
+    });
+}

@@ -1,0 +1,130 @@
+/**
+ * The page
+ */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: Helvetica, sans-serif;
+}
+
+body {
+    display: table;
+}
+
+.sudoku {
+    display: table-row;
+}
+
+.sudoku .panel {
+    display: table-cell;
+    width: 200px;
+    padding: 20px;
+    height: 100%;
+    border-right: 1px solid #aaa;
+    background: -moz-linear-gradient(top, #def, #888);
+    box-shadow: 0 4px 6px #000;   
+}
+
+/**
+ * The control panel
+ */
+.sudoku .controls label {
+    display: block;
+    margin: 8px 0;
+    cursor: pointer;
+}
+
+.sudoku .controls button.busy {
+    text-shadow: 1px 1px 1px #888;
+    color: #aaa;
+}
+
+/**
+ * The board panel
+ */
+.sudoku .board {
+    display: table-cell;
+    padding-top: 20px;
+}
+
+.sudoku.solved .board td {
+    background: #4f4;
+}
+ 
+/**
+ * The board
+ */
+.sudoku .charTable { 
+    border-collapse: collapse; 
+    border-spacing: 0; 
+    empty-cells: show;
+    border: 3px solid #000;
+    box-shadow: 0 0 8px #000;
+    margin: 0 auto;
+}
+
+.sudoku .charTable td {
+    font-family: "Segoe Print";
+    color: #349;
+    padding: 0; 
+    text-align: center; 
+    width: 2em; 
+    height: 2em; 
+    line-height: 2em; 
+    overflow: hidden; 
+    border: 1px solid #000;
+}
+
+.sudoku .hoverCursorVisible .charTable td:hover {
+    background: #ff8;
+    cursor: pointer;
+}
+
+.sudoku :not(.hoverCursorVisible) .charTable {
+    cursor: none;
+}
+
+.sudoku .charTable td:nth-child(3n+4) {
+    border-left-width: 3px;
+}
+
+.sudoku .charTable tr:nth-child(3n+4) td {
+    border-top-width: 3px;
+}
+
+.sudoku .charTable .cursor {
+    background: #6ad; 
+}
+
+.sudoku .hoverCursorVisible .charTable .cursor:hover {
+    background: #ace; 
+}
+
+.sudoku .charTable .collision {
+    background: #e00;
+    color: #fff;
+}
+
+.sudoku .charTable .initial {
+    font-weight: bold;
+    font-family: Georgia, Times, serif;
+    color: #000;
+}
+
+/**
+ * Help
+ */
+.sudoku .help {
+    font-size: 0.8em;
+}
+
+.sudoku .help dt {
+    font-weight: bold;
+}
+
+.sudoku .help dd {
+    font-style: italic;
+    margin-bottom: 0.5em;
+}

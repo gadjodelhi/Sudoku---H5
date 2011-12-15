@@ -1,0 +1,53 @@
+1. Uogolnic WorkerMethodManager - to moze sluzyc tez do wykonywania metod lokalnych, ajaksowy, websocketowych, ...
+2. ActionCaller - nadklasa, wzorzec strategia: WorkerCallerStrategy, XHRCallerStrategy, WebSockerCallerStrategy, LocalCallerStrategy
+3. ActionManager - tez moze sie da uogolnic (tak jak WorkerMethodManager); /pozniejszy dopisek/ - raczej nie, ActionManager zniknie na korzysc ActionStrategy po uogolnieniu WorkerMethodManager
+4. CommandQueue - to moze byc nie tylko command ale i Method i Action i jeszcze cos innego (JobQueue)
+5. Jak w WebSocketCallerStrategy i LocalCallerStrategy lapac wyjatki?
+
+MessageReceiver:
+    gdzie jest wolany (responseStrategy):
+    - WorkerStrategy
+    - WebSockerStrategy
+    - AjaxStrategy
+    - LocalStrategy
+    jaki rodzaj akcji jest wykonywany
+    - MethodStrategy
+    - ActionStrategy
+    - SOAP ?
+MessageSender:
+    typ message'a
+    - MethodStrategy - poniewaz bedzie to samo w Senderze i Receiverze to moze to razem dac?
+    - ActionStrategy
+    gdzie jest odbiorca
+    - WorkerStrategy
+    - WebSocketStrategy
+    - AjaxStrategy
+    - LocalStrategy
+MessageQueue: MessageSender jako parametr
+    - onbeforesend
+    - undo/redo?
+Rejestrowanie akcji rowniez po nazwie funkcji - (function x() {}).name
+
+// To ponizej jest slabe, lepsze to co jeszcze nizej
+//
+var xhrc = new XHRCaller("address.php", context);
+xhrc.call('getSessionId', null, callback);
+
+var wsc = new WebSocketCaller("", context);
+wsc.call('getConnectedUsers', null, callback);
+
+var wsc2 = new WebSocketCaller("", context);
+wsc2.call('listenForMessages', null, function wsc2callback(result) {
+    callback.call(this, result);
+    wsc2.call('listenForMessages', null, wsc2callback);
+});
+
+var lc = new LocalCaller(context);
+lc.call('deleteBodyContent', null, document);
+
+// O to jest lepsze
+//
+var xhrc = new ActionCaller(new XHRCallerStrategy(new XHRURLBuilder("/controller/{action}?json={jsonArgs}")), context);
+var wsc = new ActionCaller(new WebSockerCallerStrategy(...), context);
+var lc = new ActionCaller(new LocalCallerStrategy(), context);
+
