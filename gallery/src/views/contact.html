@@ -1,0 +1,13 @@
+<form id="contact" action="${action}" method="post">
+	<fieldset>
+		<legend>Formularz kontaktowy</legend>
+		<p class="error" tal:condition="error" tal:content="error" />
+		<p>Wszelkie komentarze mile widziane. Domyślna fraza <strong>"Bardzo mi się podobają Twoje zdjęcia"</strong> znajdująca się na początku wiadomości to autorski <strong>zaawansowany filtr antyspamowy</strong> korzystający z techniki <strong>Multibyte String</strong>, bez tego wiadomość nie zostanie wysłana.</p>
+		<ol>
+			<li class="field"><label for="fromname">Imię</label><input type="text" name="fromname" id="fromname" value="${fromname}" required="required" /></li>
+			<li class="field"><label for="from">Twój e-mail</label><input type="email" name="from" id="from" value="${from}" required="required" /></li>
+			<li class="field"><label for="message">Wiadomość</label><textarea name="message" id="message" required="required">${message}</textarea></li>
+			<li class="submit"><input type="submit" value="Wyślj" /></li>
+		</ol>
+	</fieldset>
+</form>

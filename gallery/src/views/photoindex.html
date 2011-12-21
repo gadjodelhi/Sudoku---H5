@@ -1,0 +1,10 @@
+<header>
+	<h1>${title}<br/>${description}</h1>
+	<div style="position: absolute; top: 0; right: 64px; " tal:condition="sizematters" id="sizematters"><a title="Wersja &quot;990px&quot; - wszystkie zdjecia w wiekszej rozdzielczosci i na jednej stronie" href="${sizematters}">Zobacz w wersji <strong>990px</strong></a></div>
+</header>
+
+<div class="photoindex">
+<ul class="photoindex">
+<li tal:repeat="item photos"><a tal:attributes="href item/link; title item/linktitle"><img tal:attributes="src item/thumbnail; alt item/title" /></a></li>
+</ul>
+</div>

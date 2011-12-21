@@ -1,0 +1,31 @@
+.jk-removablelist-item {
+	position: relative;
+}
+
+.jk-removablelist-remove-icon {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+	background: red;
+}
+
+.jk-editablelist-item {
+	position: relative;
+}
+
+.jk-editablelist-edit-icon {
+	position: absolute;
+	top: 0;
+	right: 16px;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+	background: green;
+}
+
+form label {
+	display: block;
+}

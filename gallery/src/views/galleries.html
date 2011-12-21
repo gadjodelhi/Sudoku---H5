@@ -1,0 +1,10 @@
+<div id="galleries">
+	<ul>
+		<li tal:repeat="item galleries" id="${repeat/item/key}">
+			<a href="${item/link}">
+				<strong>${item/title}<br />${item/description}</strong>
+				<img src="${item/thumbnail}" alt="${item/title}" />
+			</a>
+		</li>
+	</ul>
+</div>

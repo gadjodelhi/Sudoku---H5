@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pl" data-time="${serverTime}">
+<head>
+	<meta charset="UTF-8" />
+	<title tal:content="title" />
+	<meta http-equiv="X-UA-Compatible" content="IE=9" />
+	<meta name="description" content="${description}" />
+	<link rel="index" tal:attributes="href index/link" tal:condition="exists: index" />
+	<link rel="start" tal:attributes="href start/link" tal:condition="exists: start" />
+	<link rel="prev" tal:attributes="title prev/title; href prev/link" tal:condition="exists: prev" />
+	<link rel="next" tal:attributes="title next/title; href next/link" tal:condition="exists: next" />
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Reenie+Beanie" />
+	<link rel="stylesheet" href="/styles/${css}/styles.css?${php: filemtime('styles/styles.css')}" />
+	<link tal:condition="exists: canonical" rel="canonical" href="${canonical}" /> 
+
+	<link rel="license" href="http://creativecommons.org/licenses/by/2.5/pl/" />
+	<meta name="verify-v1" content="ML312yUoxEz+50O55WTikWkTnMSsyYGVUY6sA/S4sYc=" />
+	<link rel="icon" type="image/x-icon" href="/favico.ico" />
+	<link rel="shortcut icon" type="image/x-icon" href="/favico.ico" />
+	<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+</head>
+<body tal:attributes="class class">
+
+<div tal:replace="structure body" />
+<footer>
+	<p>&copy; 2002-${php: idate("Y")} Jacek Karczmarczyk - Wszystkie <span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/StillImage" rel="dc:type">zdjęcia</span> są dostępne na <a rel="license" href="http://creativecommons.org/licenses/by/2.5/pl/" style="color: #ccc">licencji Creative Commons Uznanie autorstwa 2.5 Polska</a></p>
+</footer>
+
+<script>function _setCustomVar() {	<tal:block tal:content="structure customVars" tal:omit-tag="" /> }</script>
+<script src="/scripts/gallery.js"></script>
+
+</body>
+</html>

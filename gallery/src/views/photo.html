@@ -1,0 +1,30 @@
+<h1 tal:content="shorttitle" />
+<div class="photo">
+	<nav>
+		<ul>
+			<tal:block tal:condition="exists: home">
+			<li tal:condition="not: exists: prev">
+				<a title="Powrót" tal:attributes="href home" rel="index" tal:condition="exists: home" tal:content="string:Powrót" />
+			</li>
+			</tal:block>
+
+			<li tal:condition="exists: prev">
+				<a title="Poprzednie zdjęcie - ${prevtitle}" tal:attributes="href prev" rel="prev">Poprzednie</a>
+			</li>
+			<li tal:condition="exists: next">
+				<a rel="next" title="Następne zdjęcie - ${nexttitle}" tal:attributes="href next">Następne</a>
+			</li>
+
+			<tal:block tal:condition="exists: home">
+			<li tal:condition="not: exists: next">
+				<a title="Powrót" tal:attributes="href home" rel="index" tal:condition="exists: home" tal:content="string:Powrót" />
+			</li>
+			</tal:block>
+		</ul>
+	</nav>
+	<figure>
+		<img tal:condition="exists: big" id="photo" tal:attributes="src src; alt title; title title;" data-big="${big}" />
+		<img tal:condition="not: exists: big" id="photo" tal:attributes="src src; alt title; title title;" />
+		<figcaption style="width: ${photowidth}px" tal:content="shorttitle" />
+	</figure>
+</div>

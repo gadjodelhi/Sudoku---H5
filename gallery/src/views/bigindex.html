@@ -1,0 +1,9 @@
+<hgroup>
+	<h1>${title}</h1>
+	<h2>${description}</h2>
+</hgroup>
+
+<ul class="bigindex">
+<li tal:repeat="item photos"><figure><img tal:attributes="src item/path" width="990" /><figcaption><span class="counter">${repeat/item/number}.</span> ${item/title}</figcaption></figure></li>
+</ul>
+
