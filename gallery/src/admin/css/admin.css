@@ -1,8 +1,8 @@
-.jk-removablelist-item {
+.crudable-item {
 	position: relative;
 }
 
-.jk-removablelist-remove-icon {
+.crudable-remove-icon {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -12,11 +12,7 @@
 	background: red;
 }
 
-.jk-editablelist-item {
-	position: relative;
-}
-
-.jk-editablelist-edit-icon {
+.crudable-edit-icon {
 	position: absolute;
 	top: 0;
 	right: 16px;

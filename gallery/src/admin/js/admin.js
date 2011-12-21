@@ -14,9 +14,9 @@ postDataAndImages(url, data, files, callback)// create overlay etc (dialog)
 
 */
 
-function command(name, args) {
+function command(name, args, callback) {
 	console.log(name, args);
-	return true;
+	callback && callback(args); // args for debug
 }
 
 function createGalleryDialog() {
@@ -28,22 +28,47 @@ function createGalleryDialog() {
 	$fieldset.append('<label for="id">ID</label><input type="text" name="id" id="id" />');
 	$fieldset.append('<label for="big">990</label><input type="checkbox" name="big" id="big" value="1" />');
 	
+	$fieldset.find("#title").on("change", function () {
+		if ($('#id', $fieldset).val() === '') {
+			$('#id', $fieldset).val($.trim(this.value).replace(/ +/, '-'));
+		}
+	});
+	
+	return $fieldset.parent();
+}
+
+function createPhotoDialog() {
+	var $fieldset = $('<form><fieldset><legend>Edycja zdjecia</legend></fieldset></form>').find('fieldset');
+	
+	$fieldset.append('<label for="title">Tytul</label><input type="text" name="title" id="title" />');
+	
 	return $fieldset.parent();
 }
 
 var $galleryDialog = createGalleryDialog();
-var $photoDialog = $('<form>test</form>');
+var $photoDialog = createPhotoDialog();
 
 function gallerySave(callback) {
-	console.log(this);
-	callback({
-		id: "ID",
-		title: "TITLE",
-		description: "DESCRIPTION",
-		link: "LINK",
-		thumbnail: "SRC",
-		alt: "ALT"
-	});
+	var data = {};
+	data.id = $('#id', this).val();
+	data.title = $('#title', this).val();
+	data.description = $('#description', this).val();
+	data.category = $('#category', this).val();
+	data.big = $('#big', this).val();
+	
+	//debug
+	data.link = '/' + data.id;
+	data.thumbnail = 'thumbnail';
+	data.alt = data.title;
+	
+	command('editgallery', data, function (result) {
+		if (result && result.id) {
+			callback(result);
+		}
+		else {
+			alert("Blad podczas zapisu galerii");
+		}
+	});	
 }
 
 function galleryCreateItem(data) {
@@ -63,12 +88,21 @@ function galleryCreateItem(data) {
 }
 
 function photoSave(callback) {
-	console.log('Saving photo...');
-	callback({
-		link: "LINK", 
-		title: "TITLE",
-		src: "SRC"
-	});
+	var data = {};
+	data.title = $('#title', this).val();
+	
+	//debug
+	data.link = 'link';
+	data.src = 'test';
+	
+	command('editphoto', data, function (result) {
+		if (result && result.id) {
+			callback(result);
+		}
+		else {
+			alert("Blad podczas zapisu zdjecia");
+		}
+	});	
 }
 
 function photoCreateItem(data) {
@@ -83,21 +117,49 @@ function photoCreateItem(data) {
 	return $item;
 }
 
-$('#galleries > ul').insertableList({
+function sort(what, gallery) {
+	var data = {
+		gallery: gallery,
+		order: []
+	};
+	$(this).children(':not(.crudable-insert)').each(function () {
+		data.order.push(this.id);
+	});
+	command(what + 'sort', data);
+}
+
+
+$('#galleries > ul').crudable({
 	dialog: $galleryDialog,
 	onsave: gallerySave,
-	createitem: galleryCreateItem
-}).editableList({
-	dialog: $galleryDialog,
-	onsave: gallerySave,
-	createitem: galleryCreateItem
-}).removableList({
-	onconfirm: function () {
+	createitem: galleryCreateItem,
+	beforeremove: function () {
 		return confirm('Czy na pewno usunac galerie "' + $(this).find('img').attr('alt') + '"?');
 	},
-	onclick: function (callback) {
+	onremove: function (callback) {
 		command('removegallery', {
 			id: this.id
-		}) && callback();
+		}, callback);
+	},
+	onsort: function () {
+		sort.call(this, 'gallery');
+	}
+});
+
+
+$('ul.photoindex').crudable({
+	dialog: $photoDialog,
+	onsave: photoSave,
+	createitem: photoCreateItem,
+	beforeremove: function () {
+		return confirm('Czy na pewno usunac zdjecie "' + $(this).find('img').attr('alt') + '"?');
+	},
+	onremove: function (callback) {
+		command('removephoto', {
+			id: this.id
+		}, callback);
+	},
+	onsort: function () {
+		sort.call(this, 'photo', $(this).data('galleryId'));
 	}
 });
