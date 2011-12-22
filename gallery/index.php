@@ -18,7 +18,6 @@ if ($_SERVER["HTTP_HOST"] != "karczmarczyk.pl")
   header("Location: http://karczmarczyk.pl".$_SERVER['REQUEST_URI']);
   die();
 }
-
 header("Content-type: text/html; charset=UTF-8");
 
 $args = split('/', trim(preg_replace('/^\/https?:\/\/'.preg_quote($_SERVER['HTTP_HOST']).'/', '', strtolower(trim(preg_replace('/\?[^?]*$/', '', $_SERVER['REQUEST_URI'])))), '/'));
@@ -34,8 +33,17 @@ $menuitems = array(
   'galleries'=>array('gallery-asia'=>'Azja', 'gallery-dance'=>'Ze sceny', 'gallery-mountains'=>'Góry', 'gallery-other'=>'Różności'),
   'hidden'=>array('download'=>'Jak pobrać zdjęcie')
 );
-
+	
 $galleries = simplexml_load_file('photos/photo.xml');
+
+if (isset($_GET['admin'])) {
+	if (!isset($_SERVER['PHP_AUTH_USER']) || !($_SERVER['PHP_AUTH_USER'] == 'admin' && $_SERVER['PHP_AUTH_PW'] == (string)$galleries['password'])) {
+		header('WWW-Authenticate: Basic realm="Dostep do panelu administracyjnego zablokowany"');
+		header('HTTP/1.0 401 Unauthorized');
+		echo 'Access denied';
+		exit;
+	} 
+}  
 
 if (!preg_match('/^(.*)\.html$/', $args[0], $matches))
 {
@@ -54,7 +62,7 @@ if (!preg_match('/^(.*)\.html$/', $args[0], $matches))
 
   $gallery = $galleries[0];
   if ((string)$gallery['password'] !== '') {
-	if (!isset($_SERVER['PHP_AUTH_USER']) || $_SERVER['PHP_AUTH_USER'] != (string)$gallery['id'] || $_SERVER['PHP_AUTH_PW'] != (string)$gallery['password']) {
+	if (!isset($_SERVER['PHP_AUTH_USER']) || !($_SERVER['PHP_AUTH_USER'] == 'admin' && $_SERVER['PHP_AUTH_PW'] == (string)$galleries['password']) || !($_SERVER['PHP_AUTH_USER'] == (string)$gallery['id'] && $_SERVER['PHP_AUTH_PW'] == (string)$gallery['password'])) {
 		header('WWW-Authenticate: Basic realm="Galeria prywatna"');
 		header('HTTP/1.0 401 Unauthorized');
 		echo 'Access denied';
@@ -225,6 +233,7 @@ $tpl->set('title', $title);
 $tpl->set('description', $description ? $description : $title);
 $tpl->set('customVars', $customVarsStr);
 $tpl->set('serverTime', date("Y-m-d H:i:s"));
+$tpl->set('admin', $_SERVER['PHP_AUTH_USER'] == 'admin');
 echo $tpl->execute();
 
 
