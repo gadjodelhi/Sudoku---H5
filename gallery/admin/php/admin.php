@@ -1,0 +1,1 @@
+<?phprequire_once 'Command.php';if (isset($_POST['command'])) {	$command = Command::execute($_POST['command'], array(		'commandsDir' => dirname(__FILE__) . '/commands'	), array(		'file' => '../../photos/photo.xml',	));}
