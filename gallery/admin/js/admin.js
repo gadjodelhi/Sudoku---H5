@@ -15,8 +15,22 @@ postDataAndImages(url, data, files, callback)// create overlay etc (dialog)
 */
 
 function command(name, args, callback) {
-	console.log(name, args);
-	callback && callback(args); // args for debug
+	$.ajax('/admin/php/admin.php', {
+		async: true,
+		cache: false,
+		data: {
+			command: name,
+			data: JSON.stringify(args)
+		},
+		dataType: 'json',
+		type: 'POST',
+		error: function () {
+			alert('Error');
+		},
+		success: function (data) {
+			callback(data);
+		}
+	})
 }
 
 function createGalleryDialog() {
