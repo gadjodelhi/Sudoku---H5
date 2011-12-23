@@ -52,16 +52,21 @@ function createGalleryDialog() {
 	$fieldset.append('<label for="title">Tytul</label><input type="text" name="title" id="title" />');
 	$fieldset.append('<label for="description">Opis</label><input type="text" name="description" id="description" />');
 	$fieldset.append('<label for="id">ID</label><input type="text" name="id" id="id" />');
+	$fieldset.append('<label for="index">Indeks</label><select id="index" name="index"><option value="1">Pokaz</option><option value="0">Ukryj</option></select>');
 	$fieldset.append('<label for="big">990</label><select id="big" name="big"><option value="">Auto</option><option value="1">Yes</option><option value="false">Hide</option></select>');
+	$fieldset.append('<label for="path">Sciezka</label><input type="text" name="path" id="path" />');
+	$fieldset.append('<label for="date">Data wydarzenia</label><input type="text" name="date" id="date" />');
+	$fieldset.append('<label for="date">Data opublikowania</label><input type="text" name="published" id="published" />');
 	
 	$fieldset.find("#title").on("change", function () {
-		if ($('#id', $fieldset).val() === '') {
-			$('#id', $fieldset).val($.trim(this.value).replace(/ +/, '-'));
-		}
+		var self = this;
+		$('#id, #path', this.form).each(function () {
+			this.value = this.value || $.trim(self.value).replace(/ +/, '-');
+		});
 	});
 	
-	['id', 'title', 'description', 'big', 'category'].forEach(function (item) {
-		$fieldset.find('#' + item).val($this.data(item));
+	$fieldset.find(':input', $fieldset).each(function () {
+		$(this).val($this.data(this.id));
 	});
 	
 	return $fieldset.parent();
@@ -76,14 +81,13 @@ function createPhotoDialog() {
 }
 
 function gallerySave(callback, $item) {
-	command('editgallery', {
-		originalid: $item.attr('id'),
-		id: $('#id', this).val(),
-		title: $('#title', this).val(),
-		description: $('#description', this).val(),
-		category: $('#category', this).val(),
-		big: $('#big', this).val()
-	}, callback);	
+	var $this = $(this), data = {
+		originalid: $item.attr('id')
+	};
+	$this.find(':input').each(function () {
+		data[this.id] = $(this).val(); 
+	});
+	command('editgallery', data, callback);	
 }
 
 function galleryCreateItem(data) {

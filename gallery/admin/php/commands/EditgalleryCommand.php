@@ -11,19 +11,21 @@ class EditgalleryCommand extends XMLFileCommand {
 			$gallery = $this->_xml->createElement('gallery');
 			$this->_xml->documentElement->insertBefore($gallery, $this->_xml->documentElement->childNodes->length ? $this->_xml->documentElement->childNodes->item(0) : null);
 			$gallery->setAttribute('id', $data->id);
-			$gallery->setAttribute('path', $data->id);
-			$gallery->setAttribute('published', date("Y-m-d H:i:s"));
-			$gallery->setAttribute('index', 1);
 		}
+		
+		$gallery->setAttribute('published', @$data->originalid ? $data->published : date("Y-m-d H:i:s"));
 		$gallery->setAttribute('title', $data->title);
 		$gallery->setAttribute('description', $data->description);
 		$gallery->setAttribute('big', $data->big);
 		$gallery->setAttribute('category', $data->category);
-	
+		$gallery->setAttribute('index', $data->index);
+		$gallery->setAttribute('path', $data->path);
+		$gallery->setAttribute('date', $data->date);
+		
 		$this->_export();
 		
 		$data->link = $data->id;
-		$data->thumbnail = '/photos/' . $data->id . '/' . $data->id . '.png';
+		$data->thumbnail = '/photos/' . $data->path . '/' . 'index' . '.png';
 		$data->alt = $data->title;
 		return $data;
 	}
