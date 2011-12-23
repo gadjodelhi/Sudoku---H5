@@ -207,7 +207,7 @@ if (preg_match('/^(.*)\.html$/', $args[0], $matches))
       'message'=>$_POST['message'],
       'host'=>'karczmarczyk.pl',
       'username'=>'j.karczmarczyk@larch.nazwa.pl',
-      'password'=>'pocztabuxVW16'
+      'password'=>file_get_contents('../poczta.passwd')
     ));
     $title = "Jacek Karczmarczyk - ".$menuitems['site'][$page]['content'];
   }
@@ -230,7 +230,10 @@ if (is_array($customVars)) {
 
 
 $body = '';
-foreach($modules as $module) $body .= addModule($module[0], $module[1], $tpl);
+foreach($modules as $module) {
+	$module[1]['admin'] = $_SERVER['PHP_AUTH_USER'] == 'admin';
+	$body .= addModule($module[0], $module[1], $tpl);
+}
 $tpl->set('body', $body);
 $tpl->set('css', isset($_GET['css']) ? $_GET['css'] : '1.0');
 $tpl->set('title', $title);
@@ -270,74 +273,3 @@ function addModule($name, $args, $tpl)
   return "\n\n<!-- $name BEGIN -->\n".$module->execute()."\n<!-- $name END -->\n\n";
 }
 
-
-class Gallery_Manager
-{
-  private $filename;
-  private $dom;
-  private $xpath;
-  public function __construct($filename) {
-    $this->filename = $filename;
-    $this->dom = new DOMDocument();
-    $this->dom->load($filename);
-    $this->xpath = new DOMXPath($this->dom);
-  }
-  public function createGallery($id, $category, $title, $description) {
-    $gallery = $this->dom->createElement('gallery');
-    $gallery->setAttribute('id', $id);
-    $gallery->setAttribute('category', $category);
-    $gallery->setAttribute('title', $title);
-    $gallery->setAttribute('description', $description);
-    $this->dom->documentElement->appendChild($gallery);
-    $this->update(); 
-  }
-  public function removeGallery($id) {
-    foreach($this->xpath->query('//gallery[@id="'.$id.'"]') as $gallery)
-      $gallery->parentNode->removeChild($gallery); 
-    $this->update(); 
-  }  
-  public function getGallery($id) {
-    foreach($this->xpath->query('//gallery[@id="'.$id.'"]') as $gallery)
-      return new Gallery($this, $gallery);
-  }
-  public function getGalleries($category='') {
-    $galleries = array();
-    foreach($this->xpath->query('//gallery[@category="'.$category.'"]') as $gallery)
-      $galleries[] = new Gallery($this, $gallery);
-    return $galleries;
-  }
-  public function update()
-  {
-    $this->dom->save($this->filename);
-  }
-}
-
-class Gallery
-{
-  public function __construct(Gallery_Manager $manager, DOMElement $gallery) { }
-  public function setTitle($title) { }
-  public function setDescription($description) { }
-  public function setCategory($description) { }
-  public function setPath($path) { }
-  public function addPhoto($src, $thumbnail, $title) { }
-  public function removePhoto($no) { }
-  public function getPhoto($no) { }
-  public function getPhotos() { }
-  public function update()
-  {
-    $this->manager->update();
-  }
-}
-
-class Photo
-{
-  public function __construct(Gallery $gallery) { }
-  public function setSrc($src) { }
-  public function setThumbnail($thumbnail) { }
-  public function setTitle($title) { }
-  public function getGallery() { }
-  public function update()
-  {
-    $this->manager->update();
-  }
-}

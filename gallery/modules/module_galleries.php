@@ -19,7 +19,8 @@ class Module_galleries extends Module_abstract {
 				'index'=>(int)$g['index'],
 				'path'=>(string)$g['path'],
 				'date'=>(string)$g['date'],
-				'published'=>(string)$g['published']
+				'published'=>(string)$g['published'],
+				'password'=>@$this->vars['admin'] ? (string)$g['password'] : ''
 			);
 		}
 
