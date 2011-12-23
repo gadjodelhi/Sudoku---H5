@@ -20,6 +20,11 @@
 	<!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
+
+	<tal:block tal:condition="admin">
+		<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+		<link href="/admin/css/admin.css" rel="stylesheet" type="text/css" />
+	</tal:block>
 </head>
 <body tal:attributes="class class">
 
@@ -28,8 +33,17 @@
 	<p>&copy; 2002-${php: idate("Y")} Jacek Karczmarczyk - Wszystkie <span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/StillImage" rel="dc:type">zdjęcia</span> są dostępne na <a rel="license" href="http://creativecommons.org/licenses/by/2.5/pl/" style="color: #ccc">licencji Creative Commons Uznanie autorstwa 2.5 Polska</a></p>
 </footer>
 
-<script>function _setCustomVar() {	<tal:block tal:content="structure customVars" tal:omit-tag="" /> }</script>
-<script src="/scripts/gallery.js"></script>
-
+<tal:block tal:condition="not:admin">
+	<script>function _setCustomVar() {	<tal:block tal:content="structure customVars" tal:omit-tag="" /> }</script>
+	<script src="/scripts/gallery.js"></script>
+</tal:block>
+<tal:block tal:condition="admin">
+	<script src="/admin/js/lib/jquery/jquery-1.7.1.js"></script>
+	<script src="/admin/js/lib/jquery/jquery-ui-1.8.10.custom.js"></script>
+	<script src="/admin/js/lib/helpers/jquery.jk.postListData.js"></script>
+	<script src="/admin/js/lib/plugins/jquery.crudable.js"></script>
+	<script src="/admin/js/admin.js"></script>
+</tal:block>
+	
 </body>
 </html>
