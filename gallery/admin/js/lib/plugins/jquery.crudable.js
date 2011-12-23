@@ -14,8 +14,8 @@ $.fn.crudable = function (options) {
 	}
 	
 	function changedHandler() {
-		$('.crudable-edit-icon, .crudable-remove-icon', this).remove();
-		$(this).children(':not(.crudable-insert)').addClass('crudable-item').append('<span class="crudable-edit-icon" />').append('<span class="crudable-remove-icon" />');
+		$('.crudable-icon', this).remove();
+		$(this).children(':not(.crudable-insert)').addClass('crudable-item').append('<span class="crudable-icon crudable-edit-icon" />').append('<span class="crudable-icon crudable-remove-icon" />');
 	}
 	
 	function removeHandler() {

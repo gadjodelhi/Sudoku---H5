@@ -2,24 +2,53 @@
 	position: relative;
 }
 
-.crudable-remove-icon {
+.crudable-icon {
 	position: absolute;
 	top: 0;
-	right: 0;
-	width: 16px;
-	height: 16px;
+	width: 30px;
+	height: 30px;
 	cursor: pointer;
-	background: red;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	background-color: rgba(255, 255, 255, 0.3);
+	opacity: 0.6;
+	border: 1px solid rgba(0, 0, 0, 0.4);
+	border-radius: 3px;
+}
+
+.crudable-icon:hover {
+	opacity: 1;
+}
+
+.crudable-remove-icon {
+	right: 0;
+	background-image: url(i/application_delete.png);
+}
+
+.crudable-remove-icon:hover {
+	background-color: rgba(255, 0, 0, 0.8);
 }
 
 .crudable-edit-icon {
-	position: absolute;
-	top: 0;
-	right: 16px;
-	width: 16px;
-	height: 16px;
+	right: 32px;
+	background-image: url(i/application_edit.png);
+}
+
+.crudable-edit-icon:hover {
+	background-color: rgba(0, 160, 68, 0.8);
+}
+
+#galleries .crudable-insert {
+	height: 160px; 
+	line-height: 160px;
+	font-size: 24px;
+	text-align: center;
 	cursor: pointer;
-	background: green;
+}
+
+#galleries .crudable-insert:hover {
+	background: -moz-linear-gradient(top, #000, #041);
+	text-decoration: underline;
 }
 
 form label {
