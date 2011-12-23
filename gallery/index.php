@@ -45,6 +45,10 @@ if (isset($_GET['admin'])) {
 	} 
 }  
 
+if ($_SERVER['PHP_AUTH_USER'] == 'admin') {
+	$menuitems['galleries']['gallery-hidden'] = 'Ukryte';
+}
+
 if (!preg_match('/^(.*)\.html$/', $args[0], $matches))
 {
   if (preg_match('/\.jpg$/', $_SERVER['REQUEST_URI'])) {
