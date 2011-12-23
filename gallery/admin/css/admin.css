@@ -51,6 +51,20 @@
 	text-decoration: underline;
 }
 
+.photoindex .crudable-insert {
+	background: #444;
+	border: 1px solid #555;
+	border-color: #888 #555 #555 #888;
+	border-radius: 5px;
+	line-height: 119px;
+	width: 119px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.photoindex .crudable-insert:hover {
+	background: #555;
+}
 form label {
 	display: block;
 }
