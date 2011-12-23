@@ -75,7 +75,7 @@ function gallerySave(callback) {
 	data.thumbnail = 'thumbnail';
 	data.alt = data.title;
 	
-	command('editgallery', data, function (result) {
+	command('pass', data, function (result) {
 		if (result && result.id) {
 			callback(result);
 		}

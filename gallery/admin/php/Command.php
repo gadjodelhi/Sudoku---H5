@@ -1,18 +1,20 @@
 <?php
 
+//require_once 'CommandInterface.php';
+
 class Command {
-	public static execute($command, $settings, $commandSettings, $data) {
+	public static function execute($command, $settings, $commandSettings, $data) {
 		$command = basename($command);
-		$commandFile = $settings['commandsDir'] . '/' . $command . '.php';
 		$commandClass = ucwords($command) . 'Command';
+		$commandFile = $settings['commandsDir'] . '/' . $commandClass . '.php';
 		
 		if (!file_exists($commandFile)) {
-			return;
+			throw new Exception("Command file does not exist");
 		}
 		require_once $commandFile;
 		
 		if (!class_exists($commandClass)) {
-			return;
+			throw new Exception("Command class does not exist");
 		}
 		
 		$commandObject = new $commandClass($commandSettings);
