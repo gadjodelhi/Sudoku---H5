@@ -30,7 +30,7 @@ function command(name, args, callback) {
 		success: function (data) {
 			callback(data);
 		}
-	})
+	});
 }
 
 function createGalleryDialog() {
