@@ -74,9 +74,13 @@ function createGalleryDialog() {
 
 function createPhotoDialog() {
 	var $fieldset = $('<form><fieldset><legend>Edycja zdjecia</legend></fieldset></form>').find('fieldset');
+	var $this = $(this);
 	
 	$fieldset.append('<label for="title">Tytul</label><input type="text" name="title" id="title" />');
 	
+	$fieldset.find(':input', $fieldset).each(function () {
+		$(this).val($this.data(this.id));
+	});
 	return $fieldset.parent();
 }
 
@@ -111,33 +115,26 @@ function galleryCreateItem(data) {
 	return $item;
 }
 
-function photoSave(callback) {
-	var data = {};
-	data.title = $('#title', this).val();
-	
-	//debug
-	data.link = 'link';
-	data.src = 'test';
-	
-	command('editphoto', data, function (result) {
-		if (result && result.id) {
-			callback(result);
-		}
-		else {
-			alert("Blad podczas zapisu zdjecia");
-		}
-	});	
+function photoSave(callback, $item) {
+	command('editphoto', {
+		gallery: $item.parent().data('galleryId'),
+		image: $item.data('file'),
+		title: $('#title', this).val(),
+		originallink: $item.find('a').attr('href') // workaround
+	}, callback);	
 }
 
 function photoCreateItem(data) {
 	var $item = $('<li><a><img /></a></li>');
 	$item
+		.data('title', data.title)
+		.data('image', data.image)
 		.find('a')
 		.attr('href', data.link)
-		.attr('title', data.title)
+		.attr('title', data.linktitle)
 		.find('img')
-		.attr('src', data.src)
-		.attr('alt', data.title);
+		.attr('src', data.imgsrc)
+		.attr('alt', data.imgtitle);
 	return $item;
 }
 
@@ -180,7 +177,8 @@ $('ul.photoindex').crudable({
 	},
 	onremove: function (callback) {
 		command('removephoto', {
-			id: this.id
+			gallery: $(this).parent().data('galleryId'),
+			image: $(this).data('file')
 		}, callback);
 	},
 	onsort: function () {

@@ -4,7 +4,7 @@
 </header>
 
 <div class="photoindex">
-<ul class="photoindex">
-<li tal:repeat="item photos"><a tal:attributes="href item/link; title item/linktitle"><img tal:attributes="src item/thumbnail; alt item/title" /></a></li>
+<ul class="photoindex" data-gallery-id="${galleryid}">
+<li tal:repeat="item photos" data-title="${item/originaltitle}" data-file="${item/file}"><a tal:attributes="href item/link; title item/linktitle"><img tal:attributes="src item/thumbnail; alt item/title" /></a></li>
 </ul>
 </div>
