@@ -56,7 +56,8 @@ function createGalleryDialog() {
 	$fieldset.append('<label for="big">990</label><select id="big" name="big"><option value="">Auto</option><option value="1">Yes</option><option value="false">Hide</option></select>');
 	$fieldset.append('<label for="path">Sciezka</label><input type="text" name="path" id="path" />');
 	$fieldset.append('<label for="date">Data wydarzenia</label><input type="text" name="date" id="date" />');
-	$fieldset.append('<label for="date">Data opublikowania</label><input type="text" name="published" id="published" />');
+	$fieldset.append('<label for="published">Data opublikowania</label><input type="text" name="published" id="published" />');
+	$fieldset.append('<label for="password">Haslo</label><input type="text" name="password" id="password" />');
 	
 	$fieldset.find("#title").on("change", function () {
 		var self = this;
@@ -99,10 +100,15 @@ function galleryCreateItem(data) {
 	$item
 		.attr('id', data.id)
 		.data('id', data.id)
-		.data('big', data.big)
-		.data('category', data.category)
+		.data('published', data.published)
 		.data('title', data.title)
 		.data('description', data.description)
+		.data('big', data.big)
+		.data('category', data.category)
+		.data('index', data.index)
+		.data('path', data.path)
+		.data('date', data.date)
+		.data('password', data.password)
 		.find('strong')
 		.html(data.title + "<br />" + data.description);
 	$item

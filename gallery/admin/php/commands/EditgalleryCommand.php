@@ -21,11 +21,12 @@ class EditgalleryCommand extends XMLFileCommand {
 		$gallery->setAttribute('index', $data->index);
 		$gallery->setAttribute('path', $data->path);
 		$gallery->setAttribute('date', $data->date);
+		$gallery->setAttribute('password', $data->password);
 		
 		$this->_export();
 		
 		$data->link = $data->id;
-		$data->thumbnail = '/photos/' . $data->path . '/' . 'index' . '.png';
+		$data->thumbnail = '/photos/' . $data->path . '/' . $data->id . '.png';
 		$data->alt = $data->title;
 		return $data;
 	}
