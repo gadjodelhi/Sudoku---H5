@@ -1,5 +1,8 @@
 <?php
 
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', true);
+
 require_once 'Command.php';
 
 define('XMLFILE', '../../photos/photo.xml');
@@ -20,7 +23,7 @@ if (isset($_POST['command'])) {
 	$command = Command::execute($_POST['command'], array(
 		'commandsDir' => dirname(__FILE__) . '/commands'
 	), array(
-		'file' => XMLFILE,
+		'filename' => XMLFILE,
 	), json_decode($data));
 }
 

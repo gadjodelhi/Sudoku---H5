@@ -1,6 +1,6 @@
 <div id="galleries">
 	<ul>
-		<li tal:repeat="item galleries" id="${repeat/item/key}">
+		<li tal:repeat="item galleries" id="${repeat/item/key}" data-id="${repeat/item/key}" data-title="${item/title}" data-description="${item/description}" data-big="${item/big}" data-category="${item/category}">
 			<a href="${item/link}">
 				<strong>${item/title}<br />${item/description}</strong>
 				<img src="${item/thumbnail}" alt="${item/title}" />

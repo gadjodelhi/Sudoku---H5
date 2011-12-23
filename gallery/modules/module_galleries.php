@@ -20,6 +20,8 @@ class Module_galleries extends Module_abstract {
 				'title'=>(string)$g['title'],
 				'description'=>(string)$g['description'],
 				'thumbnail'=>'/'.rtrim($this->vars['images'], '/').'/'.trim((string)$g['path'], '/').'/'.$thumbnail,
+				'big'=>(string)$g['big'],
+				'category'=>(string)$g['category']
 			);
 		}
 

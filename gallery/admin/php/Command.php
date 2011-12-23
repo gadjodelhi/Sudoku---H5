@@ -9,17 +9,39 @@ class Command {
 		$commandFile = $settings['commandsDir'] . '/' . $commandClass . '.php';
 		
 		if (!file_exists($commandFile)) {
-			throw new Exception("Command file does not exist");
+			Command::error("Command file does not exist");
 		}
 		require_once $commandFile;
 		
 		if (!class_exists($commandClass)) {
-			throw new Exception("Command class does not exist");
+			Command::error("Command class does not exist");
 		}
 		
 		$commandObject = new $commandClass($commandSettings);
-		$result = $commandObject->execute($data);
-		print json_encode($result);
+		try {
+			if (method_exists($commandObject, 'validate')) {
+				$commandObject->validate($data);
+			}
+			Command::success($commandObject->execute($data));
+		}
+		catch (Exception $e) {
+			Command::error($e->getMessage());
+		}
+	}
+	
+	public static function error($error) {
+		print json_encode(array(
+			"type" => "error",
+			"error" => $error
+		));
+		exit;
+	}
+	
+	public static function success($result) {
+		print json_encode(array(
+			"type" => "success",
+			"result" => $result
+		));
 		exit;
 	}
 }
