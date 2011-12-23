@@ -7,13 +7,7 @@ class Module_galleries extends Module_abstract {
 		$galleries = array();
 		foreach($this->vars['data']->xpath('//gallery[@category="'.$this->vars['category'].'"]') as $g) {
 			$id = (string)$g['id'];
-			
-			if (file_exists($s = 'photos/'.trim((string)$g['path'], '/').'/'.$id.'.png')) {
-				$thumbnail = $id.'.png';
-			}
-			else {
-				$thumbnail = 'index.png';
-			}
+			$thumbnail = $id.'.png';
 
 			$galleries[$id] = array(
 				'link'=>"/$id".($g['index']?'':'/1'),
