@@ -77,11 +77,14 @@ $.fn.crudable = function (options) {
 		});
 	}
 
-	this.filter('ul, ol').not('.crudable').on('crudable.changed', changedHandler).each(initCrudableItem).sortable({
-		items: '> :not(.crudable-insert)',
-		update: function (event, ui) {
-			options.onsort.call(this);
-		}
-	});
+	this.filter('ul, ol').not('.crudable').on('crudable.changed', changedHandler).each(initCrudableItem);
+	if (options.onsort) {
+		this.sortable({
+			items: '> :not(.crudable-insert)',
+			stop: function (event, ui) {
+				return options.onsort.call(this);
+			}
+		});
+	}
 	return this;
 };

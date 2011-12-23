@@ -14,9 +14,9 @@ postDataAndImages(url, data, files, callback)// create overlay etc (dialog)
 
 */
 
-function command(name, args, callback) {
+function command(name, args, callback, sync) {
 	$.ajax('/admin/php/admin.php', {
-		async: true,
+		async: sync === true ? false : true,
 		cache: false,
 		data: {
 			command: name,
@@ -66,9 +66,20 @@ function createGalleryDialog() {
 		});
 	});
 	
+	$fieldset.find('#date, #published').datepicker({
+		dateFormat: "yy-mm-dd",
+		showOtherMonths: true,
+		selectOtherMonths: true,
+		showButtonPanel: true
+	});
+	
 	$fieldset.find(':input', $fieldset).each(function () {
 		$(this).val($this.data(this.id));
 	});
+	
+	if (!$this.data('id')) {
+		$fieldset.find('#published').val((new Date()).getFullYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate());
+	}
 	
 	return $fieldset.parent();
 }
@@ -124,7 +135,7 @@ function galleryCreateItem(data) {
 function photoSave(callback, $item) {
 	command('editphoto', {
 		gallery: $item.parent().data('galleryId'),
-		image: $item.data('file'),
+		image: $item.data('image'),
 		title: $('#title', this).val(),
 		originallink: $item.find('a').attr('href') // workaround
 	}, callback);	
@@ -144,15 +155,18 @@ function photoCreateItem(data) {
 	return $item;
 }
 
-function sort(what, gallery) {
-	var data = {
+function sortPhotos(gallery) {
+	var result = false, data = {
 		gallery: gallery,
 		order: []
 	};
 	$(this).children(':not(.crudable-insert)').each(function () {
-		data.order.push(this.id);
+		data.order.push($(this).data('image'));
 	});
-	command(what + 'sort', data);
+	command('sortphoto', data, function () {
+		result = true;
+	}, true);
+	return result;
 }
 
 
@@ -167,9 +181,6 @@ $('#galleries > ul').crudable({
 		command('removegallery', {
 			id: this.id
 		}, callback);
-	},
-	onsort: function () {
-		sort.call(this, 'gallery');
 	}
 });
 
@@ -184,10 +195,10 @@ $('ul.photoindex').crudable({
 	onremove: function (callback) {
 		command('removephoto', {
 			gallery: $(this).parent().data('galleryId'),
-			image: $(this).data('file')
+			image: $(this).data('image')
 		}, callback);
 	},
 	onsort: function () {
-		sort.call(this, 'photo', $(this).data('galleryId'));
+		return sortPhotos.call(this, $(this).data('galleryId'));
 	}
 });

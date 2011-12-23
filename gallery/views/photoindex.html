@@ -5,6 +5,6 @@
 
 <div class="photoindex">
 <ul class="photoindex" data-gallery-id="${galleryid}">
-<li tal:repeat="item photos" data-title="${item/originaltitle}" data-file="${item/file}"><a tal:attributes="href item/link; title item/linktitle"><img tal:attributes="src item/thumbnail; alt item/title" /></a></li>
+<li tal:repeat="item photos" data-title="${item/originaltitle}" data-image="${item/image}"><a tal:attributes="href item/link; title item/linktitle"><img tal:attributes="src item/thumbnail; alt item/title" /></a></li>
 </ul>
 </div>

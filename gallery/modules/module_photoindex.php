@@ -22,7 +22,7 @@ class Module_photoindex extends Module_abstract
         'link'=>'/'.$this->gallery['id'].'/'.($id+1).((string)$photo['title'] ? (','.urlencode(strtr((string)$photo['title'], '/', '.'))) : ''),
         'thumbnail'=>$thumbnail,
 		'originaltitle'=>(string)$photo['title'],
-		'file'=>(string)$photo['image']
+		'image'=>(string)$photo['image']
       );
     }
 
